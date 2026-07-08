@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MI-Contact Log Book</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-brand .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-brand h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+        }
+
+        .header-brand p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--gray-700);
+            border: 1.5px solid var(--gray-200);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover { background: #dc2626; }
+
+        .btn-sm { padding: 7px 14px; font-size: 0.82rem; }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover { transform: translateY(-2px); }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-icon.blue { background: #dbeafe; color: var(--primary); }
+        .stat-icon.green { background: #d1fae5; color: var(--success); }
+        .stat-icon.orange { background: #fef3c7; color: var(--warning); }
+        .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .stat-info p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        /* Main Content */
+        .main-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .toolbar {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+            max-width: 400px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: var(--gray-50);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--gray-50);
+        }
+
+        th {
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            border-bottom: 1px solid var(--gray-200);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .contact-phone {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .contact-phone i { font-size: 0.75rem; }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag-blue { background: #dbeafe; color: #1e40af; }
+        .tag-green { background: #d1fae5; color: #065f46; }
+        .tag-orange { background: #fef3c7; color: #92400e; }
+        .tag-gray { background: #f3f4f6; color: #4b5563; }
+
+        .row-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .row-actions button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--gray-400);
+        }
+
+        .row-actions button:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .row-actions .btn-edit:hover { color: var(--primary); background: var(--primary-light); }
+        .row-actions .btn-delete:hover { color: var(--danger); background: #fee2e2; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: var(--gray-300);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .modal-body {
+            padding: 24px 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: var(--gray-50);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-footer {
+            padding: 20px 28px;
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .toast.hiding {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+        /* Import/Export Modal specific */
+        .import-dropzone {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--gray-50);
+        }
+
+        .import-dropzone:hover,
+        .import-dropzone.dragover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .import-dropzone i {
+            font-size: 2.5rem;
+            color: var(--gray-400);
+            margin-bottom: 12px;
+        }
+
+        .import-dropzone p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .import-dropzone .file-types {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-top: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container { padding: 12px; }
+            .header { padding: 16px 20px; }
+            .header-brand h1 { font-size: 1.2rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: none; }
+            th, td { padding: 12px 14px; font-size: 0.85rem; }
+            .contact-info { gap: 8px; }
+            .contact-avatar { width: 34px; height: 34px; font-size: 0.75rem; }
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            padding: 20px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .pagination button {
+            padding: 8px 14px;
+            border: 1px solid var(--gray-200);
+            background: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pagination-info {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin: 0 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo"><i class="fas fa-address-book"></i></div>
+                <div>
+                    <h1>MI-Contact Log Book</h1>
+                    <p>Manage your contacts with ease — search, edit, import & export</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline btn-sm" onclick="openImportModal()">
+                    <i class="fas fa-file-import"></i> Import
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="exportData()">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> Add Contact
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <h3 id="statTotal">0</h3>
+                    <p>Total Contacts</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fas fa-phone"></i></div>
+                <div class="stat-info">
+                    <h3 id="statWithPhone">0</h3>
+                    <p>With Phone</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fas fa-envelope"></i></div>
+                <div class="stat-info">
+                    <h3 id="statWithEmail">0</h3>
+                    <p>With Email</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fas fa-clock"></i></div>
+                <div class="stat-info">
+                    <h3 id="statRecent">0</h3>
+                    <p>Added This Week</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by name, phone, email, or company..." oninput="handleSearch()">
+                </div>
+                <div class="toolbar-actions">
+                    <button class="btn btn-outline btn-sm" onclick="clearSearch()">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Contact</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Company</th>
+                            <th>Category</th>
+                            <th>Added</th>
+                            <th style="text-align:center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactsTable">
+                        <!-- Dynamic -->
+                    </tbody>
+                </table>
+                <div id="emptyState" class="empty-state" style="display:none">
+                    <i class="fas fa-address-book"></i>
+                    <h3>No contacts found</h3>
+                    <p>Add your first contact or try a different search term</p>
+                </div>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Contact</h2>
+                <button class="modal-close" onclick="closeModal('contactModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm" onsubmit="saveContact(event)">
+                    <input type="hidden" id="contactId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>First Name *</label>
+                            <input type="text" id="firstName" required placeholder="e.g. Mohamed">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name *</label>
+                            <input type="text" id="lastName" required placeholder="e.g. Ibrahim">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="phone" required placeholder="e.g. +62 812-3456-7890">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="e.g. name@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Company / Organization</label>
+                            <input type="text" id="company" placeholder="e.g. MI-Networks">
+                        </div>
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" id="jobTitle" placeholder="e.g. Network Engineer">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="category">
+                                <option value="Personal">Personal</option>
+                                <option value="Business">Business</option>
+                                <option value="Client">Client</option>
+                                <option value="Vendor">Vendor</option>
+                                <option value="Family">Family</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Lead">Lead</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Address</label>
+                            <input type="text" id="address" placeholder="Full address">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Notes</label>
+                            <textarea id="notes" placeholder="Any additional details about this contact..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" onclick="closeModal('contactModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Contact
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Import Contacts</h2>
+                <button class="modal-close" onclick="closeModal('importModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="import-dropzone" id="dropzone" onclick="document.getElementById('importFile').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to browse or drag & drop your file here</p>
+                    <div class="file-types">Supports JSON and CSV files</div>
+                </div>
+                <input type="file" id="importFile" accept=".json,.csv" style="display:none" onchange="handleImport(event)">
+                <div style="margin-top: 16px; padding: 16px; background: var(--gray-50); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--gray-600);">
+                    <strong>Expected format:</strong><br>
+                    <code style="background: white; padding: 2px 6px; border-radius: 4px;">firstName, lastName, phone, email, company, jobTitle, category, status, address, notes</code><br><br>
+                    JSON: Array of contact objects<br>
+                    CSV: Header row with column names above
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('importModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Contact Modal -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Contact Details</h2>
+                <button class="modal-close" onclick="closeModal('viewModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="viewContent">
+                <!-- Dynamic -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('viewModal')">Close</button>
+                <button class="btn btn-primary" id="viewEditBtn" onclick="">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // ===================== DATABASE =====================
+        const DB_NAME = 'MIContactDB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'contacts';
+        let db = null;
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => { db = request.result; resolve(db); };
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME)) {
+                        const store = database.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('firstName', 'firstName', { unique: false });
+                        store.createIndex('lastName', 'lastName', { unique: false });
+                        store.createIndex('phone', 'phone', { unique: false });
+                        store.createIndex('email', 'email', { unique: false });
+                        store.createIndex('company', 'company', { unique: false });
+                        store.createIndex('category', 'category', { unique: false });
+                        store.createIndex('createdAt', 'createdAt', { unique: false });
+                    }
+                };
+            });
+        }
+
+        async function getAllContacts() {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const store = tx.objectStore(STORE_NAME);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function addContact(contact) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                contact.createdAt = new Date().toISOString();
+                contact.updatedAt = new Date().toISOString();
+                const request = store.add(contact);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function updateContact(contact) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                contact.updatedAt = new Date().toISOString();
+                const request = store.put(contact);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deleteContact(id) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                const request = store.delete(id);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function getContact(id) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const store = tx.objectStore(STORE_NAME);
+                const request = store.get(id);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function clearAllContacts() {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                const request = store.clear();
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function bulkAddContacts(contacts) {
+            const results = [];
+            for (const c of contacts) {
+                try {
+                    const id = await addContact(c);
+                    results.push({ success: true, id });
+                } catch (e) {
+                    results.push({ success: false, error: e.message });
+                }
+            }
+            return results;
+        }
+
+        // ===================== STATE =====================
+        let allContacts = [];
+        let filteredContacts = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let editingId = null;
+
+        // ===================== INIT =====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            showLoading(true);
+            try {
+                await openDB();
+                await loadContacts();
+                showToast('Contact Log Book ready!', 'success');
+            } catch (e) {
+                showToast('Failed to initialize database: ' + e.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+
+            // Drag & drop for import
+            const dropzone = document.getElementById('dropzone');
+            dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    document.getElementById('importFile').files = e.dataTransfer.files;
+                    handleImport({ target: { files: e.dataTransfer.files } });
+                }
+            });
+        });
+
+        // ===================== UI FUNCTIONS =====================
+        async function loadContacts() {
+            allContacts = await getAllContacts();
+            filteredContacts = [...allContacts];
+            updateStats();
+            renderTable();
+        }
+
+        function updateStats() {
+            const total = allContacts.length;
+            const withPhone = allContacts.filter(c => c.phone && c.phone.trim()).length;
+            const withEmail = allContacts.filter(c => c.email && c.email.trim()).length;
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            const recent = allContacts.filter(c => new Date(c.createdAt) >= oneWeekAgo).length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statWithPhone').textContent = withPhone;
+            document.getElementById('statWithEmail').textContent = withEmail;
+            document.getElementById('statRecent').textContent = recent;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('contactsTable');
+            const emptyState = document.getElementById('emptyState');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = filteredContacts.slice(start, end);
+
+            if (pageItems.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            tbody.innerHTML = pageItems.map(c => {
+                const initials = (c.firstName?.[0] || '') + (c.lastName?.[0] || '');
+                const date = new Date(c.createdAt).toLocaleDateString();
+                const tagClass = {
+                    'Personal': 'tag-blue',
+                    'Business': 'tag-green',
+                    'Client': 'tag-orange',
+                    'Vendor': 'tag-purple',
+                    'Family': 'tag-blue',
+                    'Other': 'tag-gray'
+                }[c.category] || 'tag-gray';
+
+                return `
+                    <tr onclick="viewContact(${c.id})">
+                        <td>
+                            <div class="contact-info">
+                                <div class="contact-avatar">${initials.toUpperCase()}</div>
+                                <div>
+                                    <div class="contact-name">${escapeHtml(c.firstName + ' ' + c.lastName)}</div>
+                                    <div class="contact-phone">${escapeHtml(c.jobTitle || '')}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i>
+                                ${escapeHtml(c.phone || '-')}
+                            </div>
+                        </td>
+                        <td>${escapeHtml(c.email || '-')}</td>
+                        <td>${escapeHtml(c.company || '-')}</td>
+                        <td><span class="tag ${tagClass}">${escapeHtml(c.category || 'Other')}</span></td>
+                        <td style="color:var(--gray-400);font-size:0.82rem">${date}</td>
+                        <td style="text-align:center">
+                            <div class="row-actions" onclick="event.stopPropagation()">
+                                <button class="btn-edit" onclick="editContact(${c.id})" title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="btn-delete" onclick="confirmDelete(${c.id})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+            const container = document.getElementById('pagination');
+            if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+            let html = `<span class="pagination-info">Page ${currentPage} of ${totalPages}</span>`;
+            html += `<button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span style="color:var(--gray-400);padding:0 4px">...</span>`;
+                }
+            }
+
+            html += `<button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+            container.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderTable();
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!query) {
+                filteredContacts = [...allContacts];
+            } else {
+                filteredContacts = allContacts.filter(c => {
+                    const text = `${c.firstName} ${c.lastName} ${c.phone} ${c.email} ${c.company} ${c.jobTitle} ${c.category}`.toLowerCase();
+                    return text.includes(query);
+                });
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch();
+        }
+
+        // ===================== MODALS =====================
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openAddModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Contact';
+            document.getElementById('contactForm').reset();
+            document.getElementById('contactId').value = '';
+            openModal('contactModal');
+        }
+
+        async function editContact(id) {
+            const contact = await getContact(id);
+            if (!contact) return;
+            editingId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Contact';
+            document.getElementById('contactId').value = contact.id;
+            document.getElementById('firstName').value = contact.firstName || '';
+            document.getElementById('lastName').value = contact.lastName || '';
+            document.getElementById('phone').value = contact.phone || '';
+            document.getElementById('email').value = contact.email || '';
+            document.getElementById('company').value = contact.company || '';
+            document.getElementById('jobTitle').value = contact.jobTitle || '';
+            document.getElementById('category').value = contact.category || 'Personal';
+            document.getElementById('status').value = contact.status || 'Active';
+            document.getElementById('address').value = contact.address || '';
+            document.getElementById('notes').value = contact.notes || '';
+            openModal('contactModal');
+        }
+
+        async function viewContact(id) {
+            const c = await getContact(id);
+            if (!c) return;
+            const initials = (c.firstName?.[0] || '') + (c.lastName?.[0] || '');
+            const created = new Date(c.createdAt).toLocaleString();
+            const updated = new Date(c.updatedAt).toLocaleString();
+
+            document.getElementById('viewContent').innerHTML = `
+                <div style="text-align:center;margin-bottom:24px">
+                    <div class="contact-avatar" style="width:72px;height:72px;font-size:1.5rem;margin:0 auto 12px">
+                        ${initials.toUpperCase()}
+                    </div>
+                    <h2 style="font-size:1.3rem;color:var(--gray-900)">${escapeHtml(c.firstName + ' ' + c.lastName)}</h2>
+                    <p style="color:var(--gray-500);margin-top:4px">${escapeHtml(c.jobTitle || '')}${c.company ? ' at ' + escapeHtml(c.company) : ''}</p>
+                    <span class="tag ${{
+                        'Personal':'tag-blue','Business':'tag-green','Client':'tag-orange','Vendor':'tag-purple','Family':'tag-blue','Other':'tag-gray'
+                    }[c.category]||'tag-gray'}" style="margin-top:8px">${escapeHtml(c.category||'Other')}</span>
+                </div>
+                <div style="display:grid;gap:12px">
+                    ${c.phone ? `<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border-radius:var(--radius-sm)"><i class="fas fa-phone" style="color:var(--primary);width:20px"></i><div><div style="font-size:0.75rem;color:var(--gray-400)">Phone</div><div style="font-weight:500">${escapeHtml(c.phone)}</div></div></div>` : ''}
+                    ${c.email ? `<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border-radius:var(--radius-sm)"><i class="fas fa-envelope" style="color:var(--primary);width:20px"></i><div><div style="font-size:0.75rem;color:var(--gray-400)">Email</div><div style="font-weight:500">${escapeHtml(c.email)}</div></div></div>` : ''}
+                    ${c.address ? `<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border-radius:var(--radius-sm)"><i class="fas fa-map-marker-alt" style="color:var(--primary);width:20px"></i><div><div style="font-size:0.75rem;color:var(--gray-400)">Address</div><div style="font-weight:500">${escapeHtml(c.address)}</div></div></div>` : ''}
+                    ${c.notes ? `<div style="padding:12px;background:var(--gray-50);border-radius:var(--radius-sm)"><div style="font-size:0.75rem;color:var(--gray-400);margin-bottom:4px">Notes</div><div style="font-size:0.9rem;color:var(--gray-700);white-space:pre-wrap">${escapeHtml(c.notes)}</div></div>` : ''}
+                    <div style="display:flex;gap:16px;padding-top:8px;font-size:0.8rem;color:var(--gray-400)">
+                        <span><i class="fas fa-clock" style="margin-right:4px"></i>Created: ${created}</span>
+                        <span><i class="fas fa-edit" style="margin-right:4px"></i>Updated: ${updated}</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('viewEditBtn').onclick = () => { closeModal('viewModal'); editContact(id); };
+            openModal('viewModal');
+        }
+
+        function openImportModal() {
+            openModal('importModal');
+        }
+
+        // ===================== CRUD =====================
+        async function saveContact(e) {
+            e.preventDefault();
+            const contact = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                company: document.getElementById('company').value.trim(),
+                jobTitle: document.getElementById('jobTitle').value.trim(),
+                category: document.getElementById('category').value,
+                status: document.getElementById('status').value,
+                address: document.getElementById('address').value.trim(),
+                notes: document.getElementById('notes').value.trim()
+            };
+
+            showLoading(true);
+            try {
+                if (editingId) {
+                    contact.id = editingId;
+                    await updateContact(contact);
+                    showToast('Contact updated successfully!', 'success');
+                } else {
+                    await addContact(contact);
+                    showToast('Contact added successfully!', 'success');
+                }
+                closeModal('contactModal');
+                await loadContacts();
+            } catch (err) {
+                showToast('Error saving contact: ' + err.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function confirmDelete(id) {
+            if (!confirm('Are you sure you want to delete this contact? This action cannot be undone.')) return;
+            showLoading(true);
+            try {
+                await deleteContact(id);
+                showToast('Contact deleted successfully', 'success');
+                await loadContacts();
+            } catch (err) {
+                showToast('Error deleting contact: ' + err.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ===================== IMPORT / EXPORT =====================
+        async function handleImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            showLoading(true);
+            try {
+                const text = await file.text();
+                let contacts = [];
+
+                if (file.name.endsWith('.json')) {
+                    const data = JSON.parse(text);
+                    contacts = Array.isArray(data) ? data : [data];
+                } else if (file.name.endsWith('.csv')) {
+                    contacts = parseCSV(text);
+                }
+
+                if (contacts.length === 0) {
+                    showToast('No valid contacts found in file', 'error');
+                    return;
+                }
+
+                // Normalize keys
+                const normalized = contacts.map(c => ({
+                    firstName: c.firstName || c.firstname || c.FirstName || c['First Name'] || '',
+                    lastName: c.lastName || c.lastname || c.LastName || c['Last Name'] || '',
+                    phone: c.phone || c.Phone || c.phoneNumber || c['Phone Number'] || '',
+                    email: c.email || c.Email || c['E-mail'] || '',
+                    company: c.company || c.Company || c.organization || c.Organization || '',
+                    jobTitle: c.jobTitle || c.jobtitle || c['Job Title'] || c.title || c.Title || '',
+                    category: c.category || c.Category || 'Other',
+                    status: c.status || c.Status || 'Active',
+                    address: c.address || c.Address || c['Full Address'] || '',
+                    notes: c.notes || c.Notes || c.remarks || c.Remarks || ''
+                })).filter(c => c.firstName || c.lastName || c.phone);
+
+                const results = await bulkAddContacts(normalized);
+                const successCount = results.filter(r => r.success).length;
+                const failCount = results.length - successCount;
+
+                closeModal('importModal');
+                await loadContacts();
+                showToast(`Imported ${successCount} contacts${failCount > 0 ? `, ${failCount} failed` : ''}`, successCount > 0 ? 'success' : 'warning');
+            } catch (err) {
+                showToast('Import failed: ' + err.message, 'error');
+            } finally {
+                showLoading(false);
+                e.target.value = '';
+            }
+        }
+
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            if (lines.length < 2) return [];
+            const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
+            const result = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
+                const obj = {};
+                headers.forEach((h, idx) => { obj[h] = values[idx] || ''; });
+                result.push(obj);
+            }
+            return result;
+        }
+
+        async function exportData() {
+            showLoading(true);
+            try {
+                const contacts = await getAllContacts();
+                if (contacts.length === 0) {
+                    showToast('No contacts to export', 'warning');
+                    return;
+                }
+
+                // JSON Export
+                const jsonBlob = new Blob([JSON.stringify(contacts, null, 2)], { type: 'application/json' });
+                const jsonUrl = URL.createObjectURL(jsonBlob);
+                const jsonLink = document.createElement('a');
+                jsonLink.href = jsonUrl;
+                jsonLink.download = `mi-contacts-${new Date().toISOString().split('T')[0]}.json`;
+                jsonLink.click();
+
+                // CSV Export
+                const headers = ['firstName','lastName','phone','email','company','jobTitle','category','status','address','notes','createdAt'];
+                const csvRows = [headers.join(',')];
+                contacts.forEach(c => {
+                    const row = headers.map(h => {
+                        const val = (c[h] || '').toString().replace(/"/g, '""');
+                        return `"${val}"`;
+                    });
+                    csvRows.push(row.join(','));
+                });
+                const csvBlob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+                const csvUrl = URL.createObjectURL(csvBlob);
+                const csvLink = document.createElement('a');
+                csvLink.href = csvUrl;
+                csvLink.download = `mi-contacts-${new Date().toISOString().split('T')[0]}.csv`;
+                setTimeout(() => csvLink.click(), 300);
+
+                showToast(`Exported ${contacts.length} contacts (JSON + CSV)`, 'success');
+            } catch (err) {
+                showToast('Export failed: ' + err.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ===================== UTILS =====================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = { success: 'check-circle', error: 'exclamation-circle', warning: 'exclamation-triangle', info: 'info-circle' }[type] || 'info-circle';
+            toast.innerHTML = `<i class="fas fa-${icon}" style="font-size:1.1rem;color:var(--${type === 'info' ? 'primary' : type})"></i><span style="font-size:0.9rem;color:var(--gray-700);font-weight:500">${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').classList.toggle('active', show);
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeModal(overlay.id);
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => closeModal(m.id));
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>
